@@ -46,7 +46,7 @@ services:
       user-service: { condition: service_healthy }
       product-service: { condition: service_healthy }
       order-service: { condition: service_healthy }
-    ports: ["80:80"]
+    ports: ["8080:80"]
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     networks: [app-net]
