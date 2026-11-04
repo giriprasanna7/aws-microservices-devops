@@ -93,6 +93,9 @@ pipeline {
                           aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${REGISTRY}
                           docker compose pull
                           docker compose up -d
+                          sleep 5
+                          docker compose exec -T nginx nginx -t
+                          docker compose exec -T nginx nginx -s reload
                           docker compose ps
                           curl --fail --retry 12 --retry-delay 5 http://localhost:8081/api/users/health
                           curl --fail --retry 12 --retry-delay 5 http://localhost:8081/api/products/health
