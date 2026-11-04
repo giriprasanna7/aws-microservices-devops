@@ -93,9 +93,9 @@ pipeline {
                           docker compose pull
                           docker compose up -d
                           docker compose ps
-                          curl --fail --retry 12 --retry-delay 5 http://localhost/api/users/health
-                          curl --fail --retry 12 --retry-delay 5 http://localhost/api/products/health
-                          curl --fail --retry 12 --retry-delay 5 http://localhost/api/orders/health
+                          curl --fail --retry 12 --retry-delay 5 http://localhost:8081/api/users/health
+                          curl --fail --retry 12 --retry-delay 5 http://localhost:8081/api/products/health
+                          curl --fail --retry 12 --retry-delay 5 http://localhost:8081/api/orders/health
                         "
                     '''
                 }
