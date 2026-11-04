@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h2>MicroStack</h2>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#monitoring">Monitoring</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <h1>Microservices Dashboard</h1>
+            <p>Manage and monitor your application services.</p>
+        </section>
+
+        <section id="services">
+            <h2>Our Services</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>User Service</h3>
+                    <p id="users">Checking...</p>
+                </div>
+                <div class="card">
+                    <h3>Product Service</h3>
+                    <p id="products">Checking...</p>
+                </div>
+                <div class="card">
+                    <h3>Order Service</h3>
+                    <p id="orders">Checking...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="monitoring">
+            <h2>Monitoring</h2>
+            <a href="/prometheus/" target="_blank">Prometheus</a>
+            <a href="/grafana/" target="_blank">Grafana</a>
+        </section>
+    </main>
+
+    <footer>Deployed using AWS, Docker and Jenkins</footer>
+    <script src="script.js"></script>
+</body>
+</html>

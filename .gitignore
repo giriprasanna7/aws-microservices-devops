@@ -11,3 +11,4 @@ terraform/terraform.tfvars
 terraform/tfplan
 node_modules/
 .DS_Store
+.env
