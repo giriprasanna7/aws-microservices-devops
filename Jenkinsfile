@@ -82,6 +82,7 @@ pipeline {
                         ssh $SSH_OPTS -i "$SSH_KEY" "$SSH_USER@$EC2_HOST" "mkdir -p /opt/microservices/nginx /opt/microservices/prometheus /opt/microservices/grafana/provisioning/datasources"
                         scp $SSH_OPTS -i "$SSH_KEY" docker-compose.yml "$SSH_USER@$EC2_HOST:/opt/microservices/docker-compose.yml"
                         scp $SSH_OPTS -i "$SSH_KEY" nginx/default.conf "$SSH_USER@$EC2_HOST:/opt/microservices/nginx/default.conf"
+                        scp -r $SSH_OPTS -i "$SSH_KEY" frontend/. "$SSH_USER@$EC2_HOST:/opt/microservices/frontend/"
                         scp $SSH_OPTS -i "$SSH_KEY" prometheus/prometheus.yml "$SSH_USER@$EC2_HOST:/opt/microservices/prometheus/prometheus.yml"
                         scp $SSH_OPTS -i "$SSH_KEY" grafana/provisioning/datasources/prometheus.yml "$SSH_USER@$EC2_HOST:/opt/microservices/grafana/provisioning/datasources/prometheus.yml"
                         ssh $SSH_OPTS -i "$SSH_KEY" "$SSH_USER@$EC2_HOST" "
