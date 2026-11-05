@@ -6,15 +6,13 @@ pipeline {
         disableConcurrentBuilds()
     }
 
-    parameters {
-        string(name: 'AWS_REGION', defaultValue: 'ap-south-1', description: 'AWS region containing ECR and EC2')
-        string(name: 'AWS_ACCOUNT_ID', defaultValue: '', description: '12-digit AWS account ID')
-        string(name: 'EC2_HOST', defaultValue: '', description: 'EC2 public IPv4 address')
-        string(name: 'SSH_CREDENTIALS_ID', defaultValue: 'ec2-deploy-key', description: 'Jenkins SSH private-key credential ID')
-    }
-
     environment {
+        AWS_REGION = 'ap-south-1'
+        AWS_ACCOUNT_ID = '129263124811'
+        EC2_HOST = '3.108.152.174'
+        SSH_CREDENTIALS_ID = 'micro-key-new'
         IMAGE_TAG = "build-${BUILD_NUMBER}"
+
     }
 
     stages {
