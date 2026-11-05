@@ -301,7 +301,7 @@ terraform destroy
 
 ECR repositories are configured with `force_delete = true`, so Terraform can remove repositories and images. Confirm the plan before approving destruction. Also delete any manually created AWS resources not managed by this Terraform configuration.
 
-## Notes
+## Notess
 
 - This package is a learning/demo implementation with in-memory sample data. Data resets when a service container is recreated.
 - The app does not require a database because the assignment only asks for three services and Docker Compose.
