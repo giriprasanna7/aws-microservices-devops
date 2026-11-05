@@ -1,0 +1,6 @@
+aws_region      = "ap-south-1"
+project_name    = "microservices-devops"
+instance_type   = "t3.medium"
+key_name        = "YOUR_EXISTING_EC2_KEY_PAIR_NAME"
+admin_cidr      = "YOUR_PUBLIC_IP/32"
+monitoring_cidr = "YOUR_PUBLIC_IP/32"
