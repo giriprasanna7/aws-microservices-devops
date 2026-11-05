@@ -1,10 +1,9 @@
 resource "aws_security_group" "app" {
-  name        = "${var.project_name}-sg"
-  description = "Restricted access for the microservices EC2 host"
-  vpc_id      = data.aws_vpc.default.id
+  name        = "launch-wizard-6"
+  description = "launch-wizard-6 created 2026-11-04T10:18:02.573Z"
+  vpc_id      = "vpc-0d6afcc29f1515be1"
 
   ingress {
-    description = "HTTP API through Nginx"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -12,29 +11,38 @@ resource "aws_security_group" "app" {
   }
 
   ingress {
-    description = "SSH from approved administrator IP only"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8081
+    to_port     = 8081
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.admin_cidr]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Monitoring is localhost-bound on the EC2 host and normally accessed through SSH tunnelling.
-  # These rules are retained only for optional restricted access if the Compose port binding is changed.
   ingress {
-    description = "Optional restricted Grafana access"
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = [var.monitoring_cidr]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    description = "Optional restricted Prometheus access"
-    from_port   = 9090
-    to_port     = 9090
+    from_port   = 9000
+    to_port     = 9000
     protocol    = "tcp"
-    cidr_blocks = [var.monitoring_cidr]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -44,92 +52,45 @@ resource "aws_security_group" "app" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = { Name = "${var.project_name}-sg" }
-}
-
-resource "aws_iam_role" "ec2_ecr_pull" {
-  name = "${var.project_name}-ec2-ecr-pull-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = { Service = "ec2.amazonaws.com" }
-      Action = "sts:AssumeRole"
-    }]
-  })
-}
-
-resource "aws_iam_role_policy" "ec2_ecr_pull" {
-  name = "${var.project_name}-ecr-pull"
-  role = aws_iam_role.ec2_ecr_pull.id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = ["ecr:GetAuthorizationToken"]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage"
-        ]
-        Resource = [
-          aws_ecr_repository.user.arn,
-          aws_ecr_repository.product.arn,
-          aws_ecr_repository.order.arn
-        ]
-      }
-    ]
-  })
-}
-
-resource "aws_iam_instance_profile" "ec2" {
-  name = "${var.project_name}-instance-profile"
-  role = aws_iam_role.ec2_ecr_pull.name
 }
 
 resource "aws_ecr_repository" "user" {
   name                 = "user-service"
   image_tag_mutability = "MUTABLE"
-  force_delete         = true
   image_scanning_configuration { scan_on_push = true }
 }
 
 resource "aws_ecr_repository" "product" {
   name                 = "product-service"
   image_tag_mutability = "MUTABLE"
-  force_delete         = true
   image_scanning_configuration { scan_on_push = true }
 }
 
 resource "aws_ecr_repository" "order" {
   name                 = "order-service"
   image_tag_mutability = "MUTABLE"
-  force_delete         = true
   image_scanning_configuration { scan_on_push = true }
 }
 
 resource "aws_instance" "app" {
-  ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.instance_type
-  subnet_id                   = data.aws_subnets.default.ids[0]
+  ami                         = "ami-0c7632fb77f35db43"
+  instance_type               = "t3.small"
+  subnet_id                   = "subnet-01ab588fa023f33da"
   vpc_security_group_ids      = [aws_security_group.app.id]
-  key_name                    = var.key_name
-  iam_instance_profile        = aws_iam_instance_profile.ec2.name
+  key_name                    = "micro-key"
+  iam_instance_profile        = "MicroservicesEC2ECRReadRole"
   associate_public_ip_address = true
-  user_data                   = file("${path.module}/user_data.sh")
-  user_data_replace_on_change = true
+
+  user_data_replace_on_change = false
 
   root_block_device {
-    volume_size           = 20
+    volume_size           = 8
     volume_type           = "gp3"
     delete_on_termination = true
-    encrypted             = true
+    encrypted             = false
   }
 
-  tags = { Name = "${var.project_name}-ec2" }
+  tags = {
+    Name = "application"
+  }
 }

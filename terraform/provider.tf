@@ -1,7 +1,11 @@
 provider "aws" {
   region = var.aws_region
-}
 
+  assume_role {
+    role_arn     = "arn:aws:iam::129263124811:role/tarrafrom"
+    session_name = "TerraformSession"
+  }
+}
 data "aws_vpc" "default" {
   default = true
 }
